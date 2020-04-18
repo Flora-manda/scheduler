@@ -8,6 +8,8 @@ import Form from "components/Appointment/Form";
 import Saving from "components/Appointment/Saving";
 import Deleting from "components/Appointment/Deleting";
 import Confirm from "components/Appointment/Confirm";
+import ErrorSaving from "components/Appointment/Error Saving";
+import ErrorDeleting from "components/Appointment/Error Deleting";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
@@ -16,6 +18,8 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
@@ -31,7 +35,7 @@ export default function Appointment(props) {
     back(EMPTY);
   }
 
-  function onCancelOnEdit() {
+  function onCancelOnEditAndError() {
     transition(SHOW);
   }
 
@@ -50,7 +54,10 @@ export default function Appointment(props) {
       interviewer,
     };
     transition(SAVING);
-    props.bookInterview(props.id, interview).then(() => transition(SHOW));
+    props
+      .bookInterview(props.id, interview)
+      .then(() => transition(SHOW))
+      .catch((error) => transition(ERROR_SAVE, true));
   }
 
   //------- FUNCTION TO IMPLEMENT DELETE BUTTON ON SHOW ----------//
@@ -59,8 +66,11 @@ export default function Appointment(props) {
       student: name,
       interviewer,
     };
-    transition(DELETING);
-    props.deleteInterview(props.id, interview).then(() => transition(EMPTY));
+    transition(DELETING, true);
+    props
+      .deleteInterview(props.id, interview)
+      .then(() => transition(EMPTY))
+      .catch((error) => transition(ERROR_DELETE, true));
   }
 
   //------- RENDER APPOINTMENT VIEW ----------//
@@ -89,16 +99,28 @@ export default function Appointment(props) {
           onCancel={onCancel}
           onSave={save}
           name={props.interview.student}
-          interviewer={props.interview.interviewer.name}
+          interviewer={props.interview.interviewer}
         />
       )}
       {mode === SAVING && <Saving message="Saving" />}
       {mode === DELETING && <Deleting message="Deleting" />}
       {mode === CONFIRM && (
         <Confirm
-          onCancel={onCancelOnEdit}
+          onCancel={onCancelOnEditAndError}
           onConfirm={onConfirm}
           message="Are you sure you would like to delete?"
+        />
+      )}
+      {mode === ERROR_SAVE && (
+        <ErrorSaving
+          onClose={() => transition(EMPTY)}
+          message="Could not save appointment"
+        />
+      )}
+      {mode === ERROR_DELETE && (
+        <ErrorDeleting
+          onClose={onCancelOnEditAndError}
+          message="Could not cancel appointment"
         />
       )}
     </article>
