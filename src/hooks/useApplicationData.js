@@ -65,7 +65,7 @@ export function useApplicationData() {
   }
 
   function bookInterview(id, interview) {
-    const putRequest = axios
+    return axios
       .put(`/api/appointments/${id}`, {
         interview,
       })
@@ -81,8 +81,6 @@ export function useApplicationData() {
         setState({ ...state, appointments });
       })
       .then(findSpots(id, "Book"));
-
-    return putRequest;
   }
 
   function deleteInterview(id) {
