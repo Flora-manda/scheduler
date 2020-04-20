@@ -99,7 +99,7 @@ export default function Appointment(props) {
           onCancel={onCancel}
           onSave={save}
           name={props.interview.student}
-          interviewer={props.interview.interviewer}
+          interviewer={props.interview.interviewer.id}
         />
       )}
       {mode === SAVING && <Saving message="Saving" />}
