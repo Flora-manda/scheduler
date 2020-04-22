@@ -60,9 +60,21 @@ export function useApplicationData() {
     let newDaysArray = state.days;
     newDaysArray[dayIndex].spots = spotResult;
 
-    //SetState with the new days information
-    setState({ ...state, days: newDaysArray });
+    return newDaysArray;
   }
+
+  //   function findspots(state, day) {
+  //   let dayFound = state.days.find((dayItem) => dayItem.name === day);
+  //   //console.log("DAY FOUND", dayFound);
+  //   if (!dayFound) {
+  //     return [];
+  //   } else if (dayFound) {
+  //     let appointments = dayFound.appointments.map(
+  //       (dayApptId) => state.appointments[dayApptId]
+  //     );
+  //     return appointments;
+  //   }
+  // }
 
   function bookInterview(id, interview) {
     return axios
@@ -93,14 +105,10 @@ export function useApplicationData() {
       [id]: appointment,
     };
 
-    const deleteRequest = axios
-      .delete(`/api/appointments/${id}`)
-      .then(() => {
-        setState({ ...state, appointments });
-      })
-      .then(findSpots(id, "Delete"));
-
-    return deleteRequest;
+    return axios.delete(`/api/appointments/${id}`).then(() => {
+      const newDaysArray = findSpots(id, "Delete");
+      setState({ ...state, appointments, days: newDaysArray });
+    });
   }
 
   return { state, setDay, bookInterview, deleteInterview };
