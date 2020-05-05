@@ -60,6 +60,19 @@ export default function Appointment(props) {
       .catch((error) => transition(ERROR_SAVE, true));
   }
 
+  //------- FUNCTION TO IMPLEMENT SAVE BUTTON ON EDIT FORM ----------//
+  function saveOnEdit(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer,
+    };
+    transition(SAVING);
+    props
+      .editInterview(props.id, interview)
+      .then(() => transition(SHOW))
+      .catch((error) => transition(ERROR_SAVE, true));
+  }
+
   //------- FUNCTION TO IMPLEMENT DELETE BUTTON ON SHOW ----------//
   function onConfirm(name, interviewer) {
     const interview = {
@@ -97,7 +110,7 @@ export default function Appointment(props) {
         <Form
           interviewers={props.interviewers}
           onCancel={onCancel}
-          onSave={save}
+          onSave={saveOnEdit}
           name={props.interview.student}
           interviewer={props.interview.interviewer.id}
         />

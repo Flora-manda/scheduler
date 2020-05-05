@@ -95,6 +95,24 @@ export function useApplicationData() {
       .then(findSpots(id, "Book"));
   }
 
+  function editInterview(id, interview) {
+    return axios
+      .put(`/api/appointments/${id}`, {
+        interview,
+      })
+      .then(() => {
+        const appointment = {
+          ...state.appointments[id],
+          interview: { ...interview },
+        };
+        const appointments = {
+          ...state.appointments,
+          [id]: appointment,
+        };
+        setState({ ...state, appointments });
+      });
+  }
+
   function deleteInterview(id) {
     const appointment = {
       ...state.appointments[id],
@@ -111,5 +129,5 @@ export function useApplicationData() {
     });
   }
 
-  return { state, setDay, bookInterview, deleteInterview };
+  return { state, setDay, bookInterview, deleteInterview, editInterview };
 }
