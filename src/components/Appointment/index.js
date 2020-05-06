@@ -125,10 +125,7 @@ export default function Appointment(props) {
         />
       )}
       {mode === ERROR_SAVE && (
-        <ErrorSaving
-          onClose={() => back()}
-          message="Could not save appointment"
-        />
+        <ErrorSaving onClose={onCancel} message="Could not save appointment" />
       )}
       {mode === ERROR_DELETE && (
         <ErrorDeleting
