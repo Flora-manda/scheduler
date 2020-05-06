@@ -32,7 +32,7 @@ export default function Appointment(props) {
   }
 
   function onCancel() {
-    back(EMPTY);
+    back();
   }
 
   function onCancelOnEditAndError() {
@@ -109,7 +109,7 @@ export default function Appointment(props) {
       {mode === EDIT && (
         <Form
           interviewers={props.interviewers}
-          onCancel={onCancel}
+          onCancel={onCancelOnEditAndError}
           onSave={saveOnEdit}
           name={props.interview.student}
           interviewer={props.interview.interviewer.id}
@@ -126,7 +126,7 @@ export default function Appointment(props) {
       )}
       {mode === ERROR_SAVE && (
         <ErrorSaving
-          onClose={() => transition(EMPTY)}
+          onClose={() => back()}
           message="Could not save appointment"
         />
       )}
