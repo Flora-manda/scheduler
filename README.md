@@ -4,7 +4,7 @@ This React application allows users to book, edit and cancel interviews. It comb
 
 ## Setup
 
-Install dependencies with `npm install`.
+Install dependencies with npm install. Setup the following API according to the instructions in the README: https://github.com/Flora-manda/scheduler-api
 
 ## Dependencies
 
